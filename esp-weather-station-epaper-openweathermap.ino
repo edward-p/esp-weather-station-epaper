@@ -330,9 +330,10 @@ void updateData()
 	currentWeatherClient->updateCurrentById(&currentWeather, apiKey, locID);
 	delete currentWeatherClient;
 	currentWeatherClient = nullptr;
-//shorten the description
+//shorten the long description
 	if (currentWeather.description == "scattered clouds")
 		currentWeather.description = "scttd clouds";
+
 	if (LANG == 1) //upercase the first character
 		currentWeather.description[0] -= 32;
 
@@ -348,9 +349,10 @@ void updateData()
 
 
 	for (int i = 0; i < MAX_FORECASTS; i++) {
-		if (currentWeather.description == "scattered clouds")
-			currentWeather.description = "scttd clouds";
-		if (LANG == 2) //upercase the first character
+		//shorten the long description
+		if (forecasts[i].description == "scattered clouds")
+			forecasts[i].description = "scttd clouds";
+		if (LANG == 1) //upercase the first character
 			forecasts[i].description[0] -= 32;
 	}
 	lastUpdate = ntpClient.getFormattedTime();
