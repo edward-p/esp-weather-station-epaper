@@ -51,12 +51,8 @@
 
 #include <ESP8266WiFi.h>
 #include <Ticker.h>
-#include <JsonListener.h>
 #include <Wire.h>
 #include <NTPClient.h>
-#include <WiFiUdp.h>
-#include <DNSServer.h>
-#include <ESP8266WebServer.h>
 #include <WiFiManager.h>
 #include <EEPROM.h>
 #include <SPI.h>
@@ -67,13 +63,12 @@
 
 #include "settings.h"
 #include "bitmaps.h"
-#include "strings.h"
+#include "lang.h"
 ADC_MODE(ADC_VCC);
 
 /***************************
  **************************/
 String locID;
-String locName;
 String apiKey;
 
 String lastUpdate = "--";
@@ -103,7 +98,7 @@ void setup()
 	pinMode(DC, OUTPUT);
 	pinMode(RST, OUTPUT);
 	pinMode(BUSY, INPUT);
-	EEPROM.begin(60);
+	EEPROM.begin(41);
 	SPI.beginTransaction(SPISettings(2000000, MSBFIRST, SPI_MODE0));
 	SPI.begin();
 	EPD.EPD_init_Part(); driver_delay_xms(DELAYTIME);
@@ -111,8 +106,7 @@ void setup()
 	   wifimanager
 	*************************************************/
 	//WiFi.begin(WIFI_SSID, WIFI_PWD);
-	WiFiManagerParameter wp_locID("locID", "location id", "", 8);
-	WiFiManagerParameter wp_locDisp("locDisp", "location name", "", 16);
+	WiFiManagerParameter wp_locID("locID", "location id", "", 7);
 	WiFiManagerParameter wp_apiKey("apiKey", "openweathermap api key", "", 32);
 
 	WiFiManager wifiManager;
@@ -123,7 +117,6 @@ void setup()
 	wifiManager.setAPCallback(configModeCallback);
 	wifiManager.setSaveConfigCallback(saveConfigCallback);
 	wifiManager.addParameter(&wp_locID);
-	wifiManager.addParameter(&wp_locDisp);
 	wifiManager.addParameter(&wp_apiKey);
 	wifiManager.autoConnect("Weather widget");
 	while (WiFi.status() != WL_CONNECTED) {
@@ -142,7 +135,6 @@ void setup()
 	}
 	ntpClient.begin();
 	locID = wp_locID.getValue();
-	locName = wp_locDisp.getValue();
 	apiKey = wp_apiKey.getValue();
 	/*************************************************
 	   EPPROM Write
@@ -154,10 +146,6 @@ void setup()
 		EEPROM.write(i++, locID.length());
 		for (int j = 0; j < locID.length(); i++, j++)
 			EEPROM.write(i, locID[j]);
-		//write location name
-		EEPROM.write(i++, locName.length());
-		for (int j = 0; j < locName.length(); i++, j++)
-			EEPROM.write(i, locName[j]);
 		//write API key
 		EEPROM.write(i++, apiKey.length());
 		for (int j = 0; j < apiKey.length(); i++, j++)
@@ -173,14 +161,12 @@ void setup()
 	locID = "";
 	for (int j = 0, length = EEPROM.read(i++); j < length; j++, i++)
 		locID += (char)EEPROM.read(i);
-	//read location name
-	locName = "";
-	for (int j = 0, length = EEPROM.read(i++); j < length; j++, i++)
-		locName += (char)EEPROM.read(i);
 	//read API key
 	apiKey = "";
 	for (int j = 0, length = EEPROM.read(i++); j < length; j++, i++)
 		apiKey += (char)EEPROM.read(i);
+	Serial.println(locID);
+	Serial.println(apiKey);
 	/*************************************************
 	   update weather
 	*************************************************/
@@ -205,42 +191,22 @@ void loop()
 	if (digitalRead(D3) == LOW) {
 		WiFiManager wifiManager;
 		wifiManager.resetSettings();
+		delay(200);
 		ESP.restart();
 	}
 	EPD.deepsleep();
 	ESP.deepSleep(60 * sleeptime * 1000000);
 }
 
-const String getWindDirectionSign(float windDeg)
+const int getWindDirectionSign(float windDeg)
 {
-	String directionSign;
 	double wd = windDeg;
 
 	if (wd - 11.25 < 0)
 		wd = wd - 11.25 + 360;
 	else
 		wd -= 11.25;
-	int direct = ceil(wd / 22.5);
-	switch (direct) {
-	case 0: directionSign = "  N"; break;
-	case 1: directionSign = "NNE"; break;
-	case 2: directionSign = " NE"; break;
-	case 3: directionSign = "ENE"; break;
-	case 4: directionSign = "  E"; break;
-	case 5: directionSign = "ESE"; break;
-	case 6: directionSign = " SE"; break;
-	case 7: directionSign = "SSE"; break;
-	case 8: directionSign = "  S"; break;
-	case 9: directionSign = "SSW"; break;
-	case 10: directionSign = " SW"; break;
-	case 11: directionSign = "WSW"; break;
-	case 12: directionSign = "  W"; break;
-	case 13: directionSign = "WNW"; break;
-	case 14: directionSign = " WN"; break;
-	case 15: directionSign = "NWN"; break;
-	default: directionSign = "  N"; break;
-	}
-	return directionSign;
+	return (int)floor(wd / 22.5);
 }
 
 const byte getMeteoconIcon(String iconText)
@@ -280,12 +246,12 @@ void updatedisplay()
 	EPD.SetFont(12); unsigned char code[] = { 0x00,  getMeteoconIcon(currentWeather.icon) }; EPD.DrawUnicodeStr(0, 16, 80, 80, 1, code);
 	EPD.SetFont(13); unsigned char code2[] = { 0x00, getMeteoconIcon(currentWeather.icon) }; EPD.DrawUnicodeStr(0, 113, 32, 32, 1, code2);
 	EPD.SetFont(3);
-	EPD.DrawXbm_P(80, 5, 12, 12, (unsigned char *)city_icon); EPD.DrawUTF(80, 21, 12, 12, locName); //city name
-	EPD.DrawUTF(96, 72, 12, 12, "HM"); EPD.DrawUTF(96, 90, 12, 12, String(currentWeather.humidity) + "%");
+	EPD.DrawXbm_P(80, 5, 12, 12, (unsigned char *)city_icon); EPD.DrawUTF(80, 21, 12, 12, currentWeather.cityName); //city name
+	EPD.DrawUTF(96, 72, 12, 12, (String)strHumidity); EPD.DrawUTF(96, 100, 12, 12, String(currentWeather.humidity) + "%");
 	EPD.DrawUTF(112, 72, 12, 12, MONTH_NAMES[timeinfo->tm_mon]); EPD.DrawUTF(112, 90, 12, 12, String(timeinfo->tm_mday));
 
 	EPD.DrawUTF(2, 147, 12, 12, WDAY_NAMES[timeinfo->tm_wday] + " " + String(currentWeather.tempMin, 1) + degreeSign + "~" + String(currentWeather.tempMax, 1) + degreeSign);
-	EPD.DrawUTF(17, 147, 12, 12, currentWeather.description + " " + getWindDirectionSign(currentWeather.windDeg) + " " + String(currentWeather.windSpeed, 1) + "m/s");
+	EPD.DrawUTF(17, 147, 12, 12, currentWeather.description + " " + strWindDirection[getWindDirectionSign(currentWeather.windDeg)] + "->" + String(currentWeather.windSpeed, 1) + "m/s");
 	EPD.DrawXline(114, 295, 30);
 
 	//c for count, 2 is the maximum forecasts can display
@@ -297,7 +263,7 @@ void updatedisplay()
 			EPD.SetFont(13); unsigned char code3[] = { 0x00, getMeteoconIcon(forecasts[i].icon) }; EPD.DrawUnicodeStr(x, 113, 32, 32, 1, code3);
 			EPD.SetFont(3);
 			EPD.DrawUTF(x + 2, 147, 12, 12, WDAY_NAMES[obsInfo->tm_wday] + " "  + String(forecasts[i].tempMin, 1) + degreeSign  + "~" + String(forecasts[i].tempMax, 1) + degreeSign);
-			EPD.DrawUTF(x + 17, 147, 12, 12, forecasts[i].description + " " + getWindDirectionSign(forecasts[i].windDeg) + " " + String(forecasts[i].windSpeed, 1) + "m/s");
+			EPD.DrawUTF(x + 17, 147, 12, 12, forecasts[i].description + " " + strWindDirection[getWindDirectionSign(forecasts[i].windDeg)] + "->" + String(forecasts[i].windSpeed, 1) + "m/s");
 			EPD.DrawXline(114, 295, x + 30);
 			x += 31;
 			c++;
@@ -311,8 +277,8 @@ void updatedisplay()
 	EPD.SetFont(3);
 	EPD.DrawYline(96, 127, 123);
 	EPD.DrawYline(96, 127, 182);
-	EPD.DrawUTF(96 + 14, 187, 12, 12, String("updated at ") + lastUpdate);    //last time updated
-	EPD.DrawUTF(96, 128, 12, 12, String("Pressure:"));
+	EPD.DrawUTF(96 + 14, 187, 12, 12, (String)strLastUpdate + " " + lastUpdate);    //last time updated
+	EPD.DrawUTF(96, 128, 12, 12, (String)strPressure);
 	EPD.DrawUTF(96 + 14, 128, 12, 12, String(currentWeather.pressure / 10.0, 1) + "kPa");
 
 	EPD.SetFont(0x1);
@@ -364,8 +330,11 @@ void updateData()
 	currentWeatherClient->updateCurrentById(&currentWeather, apiKey, locID);
 	delete currentWeatherClient;
 	currentWeatherClient = nullptr;
-//upercase the first character
-	currentWeather.description[0] -= 32;
+//shorten the description
+	if (currentWeather.description == "scattered clouds")
+		currentWeather.description = "scttd clouds";
+	if (LANG == 1) //upercase the first character
+		currentWeather.description[0] -= 32;
 
 	Serial.println("Updating forecasts...");
 	OpenWeatherMapForecast *forecastClient = new OpenWeatherMapForecast();
@@ -376,9 +345,14 @@ void updateData()
 	forecastClient->updateForecastsById(forecasts, apiKey, locID, MAX_FORECASTS);
 	delete forecastClient;
 	forecastClient = nullptr;
-	//upercase the first character
-	for (int i = 0; i < MAX_FORECASTS; i++)
-		forecasts[i].description[0] -= 32;
+
+
+	for (int i = 0; i < MAX_FORECASTS; i++) {
+		if (currentWeather.description == "scattered clouds")
+			currentWeather.description = "scttd clouds";
+		if (LANG == 2) //upercase the first character
+			forecasts[i].description[0] -= 32;
+	}
 	lastUpdate = ntpClient.getFormattedTime();
 }
 

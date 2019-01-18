@@ -4,7 +4,6 @@
 #pragma once
 
 #define UTC_OFFSET +8
-const String OPEN_WEATHER_MAP_LANGUAGE = "en";
 const int sleeptime = 30;                       //updating interval 71min maximum
 byte end_time = 1;                              //time that stops to update weather forecast
 byte start_time = 7;                            //time that starts to update weather forecast

@@ -1,6 +1,6 @@
 # esp8266-weather-station-epaper-OpenWeatherMap
 
-Forked from [duck531a98/esp8266-weather-station-epaper](https://github.com/duck531a98/esp8266-weather-station-epaper) change weathersource to OpenWeatherMap
+Forked from [duck531a98/esp8266-weather-station-epaper](https://github.com/duck531a98/esp8266-weather-station-epaper) change weather source to OpenWeatherMap
 
 ## Weather Forecast Data
 
