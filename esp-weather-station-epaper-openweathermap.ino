@@ -277,9 +277,10 @@ void updatedisplay()
 	EPD.SetFont(3);
 	EPD.DrawYline(96, 127, 123);
 	EPD.DrawYline(96, 127, 182);
-	EPD.DrawUTF(96 + 14, 187, 12, 12, (String)strLastUpdate + " " + lastUpdate);    //last time updated
+	EPD.DrawUTF(96, 192, 12, 12, "OpenWeatherMap");    //OpenWeatherMap
+	EPD.DrawUTF(112, 187, 12, 12, (String)strLastUpdate + " " + lastUpdate);    //last time updated
 	EPD.DrawUTF(96, 128, 12, 12, (String)strPressure);
-	EPD.DrawUTF(96 + 14, 128, 12, 12, String(currentWeather.pressure / 10.0, 1) + "kPa");
+	EPD.DrawUTF(112, 128, 12, 12, String(currentWeather.pressure / 10.0, 1) + "kPa");
 
 	EPD.SetFont(0x1);
 	EPD.DrawUTF(96, 5, 32, 32, String(currentWeather.temp, 0) + "°"); //currentWeather
@@ -316,8 +317,10 @@ void updateData()
 
 	// long sleep during the none update time
 	if (Hours == end_time) {
-		if ((start_time - end_time) < 0) rtc_mem[1] = (24 - Hours + start_time) * 60 / sleeptime;
-		else rtc_mem[1] = (start_time - Hours) * 60 / sleeptime;
+		if ((start_time - end_time) < 0)
+			rtc_mem[1] = (24 - Hours + start_time) * 60 / sleeptime;
+		else
+			rtc_mem[1] = (start_time - Hours) * 60 / sleeptime;
 		ESP.rtcUserMemoryWrite(0, (uint32_t*)&rtc_mem, sizeof(rtc_mem));
 		Serial.println("rtc_mem[1]");
 		Serial.println(rtc_mem[1]);
