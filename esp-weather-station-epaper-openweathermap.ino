@@ -247,8 +247,8 @@ void updatedisplay()
 	EPD.SetFont(13); unsigned char code2[] = { 0x00, getMeteoconIcon(currentWeather.icon) }; EPD.DrawUnicodeStr(0, 113, 32, 32, 1, code2);
 	EPD.SetFont(3);
 	EPD.DrawXbm_P(80, 5, 12, 12, (unsigned char *)city_icon); EPD.DrawUTF(80, 21, 12, 12, currentWeather.cityName); //city name
-	EPD.DrawUTF(96, 72, 12, 12, (String)strHumidity); EPD.DrawUTF(96, 100, 12, 12, String(currentWeather.humidity) + "%");
-	EPD.DrawUTF(112, 72, 12, 12, MONTH_NAMES[timeinfo->tm_mon]); EPD.DrawUTF(112, 90, 12, 12, String(timeinfo->tm_mday));
+	EPD.DrawUTF(96, 72, 12, 12, (String)strHumidity); EPD.DrawUTF(96, 98, 12, 12, String(currentWeather.humidity) + "%");
+	EPD.DrawUTF(112, 76, 12, 12, MONTH_NAMES[timeinfo->tm_mon]); EPD.DrawUTF(112, 96, 12, 12, String(timeinfo->tm_mday));
 
 	EPD.DrawUTF(2, 147, 12, 12, WDAY_NAMES[timeinfo->tm_wday] + " " + String(currentWeather.tempMin, 1) + degreeSign + "~" + String(currentWeather.tempMax, 1) + degreeSign);
 	EPD.DrawUTF(17, 147, 12, 12, currentWeather.description + " " + strWindDirection[getWindDirectionSign(currentWeather.windDeg)] + "->" + String(currentWeather.windSpeed, 1) + "m/s");

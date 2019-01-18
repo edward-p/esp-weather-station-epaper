@@ -23,7 +23,7 @@ const String strWindDirection[] = {
 	"WN",
 	"NWN"
 };
-const char* strHumidity = "HM";
+const char* strHumidity = "HUM";
 const char* strPressure = "Pressure";
 const char* strLastUpdate = "Updated at";
 const char* config_page_line1 = "Connect WIFI ";
