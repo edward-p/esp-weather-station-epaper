@@ -9,7 +9,7 @@ As your device will be displaying data from OpenWeatherMap you need an "API key"
 -   Go to <https://docs.thingpulse.com/go/create-openweathermap-key>.
 -   Take note of the features in the "Free" column. By using the free plan you are limited to 60 - - calls per minute which is just enough for personal usage.
 -   In the "Free" column click on "Get API key and Start". 
--	You need also get the city id of your location which can be found in url like:[https://openweathermap.org/city/2643743](https://openweathermap.org/city/2643743). The `2643743` is the ID of London.
+-   You need also get the city id of your location which can be found in url like:<https://openweathermap.org/city/2643743>. The `2643743` is the ID of London.
 
 ## Summary
 
@@ -27,7 +27,9 @@ Esp8266 is in deep sleeping after update the weather forecast to save battery.
 ## Dependents
 
 [json-streaming-parser](https://github.com/squix78/json-streaming-parser) by _Daniel Eichhorn_
+
 [WiFiManager](https://github.com/tzapu/WiFiManager) by _tzapu_
+
 [esp8266-weather-station](https://github.com/ThingPulse/esp8266-weather-station) by _ThingPulse_
 
 ## BOM
@@ -64,7 +66,7 @@ There will be two versions of my pcb. One without epaper driving components and 
 
 ## Font
 
-I developped this tool to generate your own font (unicode ucs-2)
+_Hui Lu_ developped this tool to generate your own font (unicode ucs-2)
 <https://github.com/duck531a98/font-generator>
 
 Since arduino ide is compiling the code to utf-8 charset. There is a internal function to convert utf-8 to unicode ucs-2. Display strings typed in to arduino ide with function DrawUTF.
