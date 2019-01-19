@@ -2,6 +2,8 @@
 
 Forked from [duck531a98/esp8266-weather-station-epaper](https://github.com/duck531a98/esp8266-weather-station-epaper) change weather source to OpenWeatherMap
 
+![](https://github.com/edward-p/esp-weather-station-epaper-openweathermap/raw/openweathermap/pics/IMG_20190119_211538.jpg)
+
 ## Weather Forecast Data
 
 As your device will be displaying data from OpenWeatherMap you need an "API key" from them. It uniquely ties requests from your device(s) to your account and ensures that the number of requests remains within your allotted quota.
