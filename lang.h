@@ -1,4 +1,4 @@
-#define LANG 2  //1 English 2 Chinees
+#define LANG 1  //1 English 2 Chinees
 const String WDAY_NAMES[] = { "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT" };
 const String MONTH_NAMES[] = { "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" };
 

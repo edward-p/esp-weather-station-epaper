@@ -244,15 +244,15 @@ void updatedisplay()
 	EPD.clearshadows(); EPD.clearbuffer(); EPD.fontscale = 1;
 
 	EPD.SetFont(12); unsigned char code[] = { 0x00,  getMeteoconIcon(currentWeather.icon) }; EPD.DrawUnicodeStr(0, 16, 80, 80, 1, code);
-	EPD.SetFont(13); unsigned char code2[] = { 0x00, getMeteoconIcon(currentWeather.icon) }; EPD.DrawUnicodeStr(0, 113, 32, 32, 1, code2);
+	EPD.SetFont(13); unsigned char code2[] = { 0x00, getMeteoconIcon(currentWeather.icon) }; EPD.DrawUnicodeStr(0, 97, 32, 32, 1, code2);
 	EPD.SetFont(3);
 	EPD.DrawXbm_P(80, 5, 12, 12, (unsigned char *)city_icon); EPD.DrawUTF(80, 21, 12, 12, currentWeather.cityName); //city name
 	EPD.DrawUTF(96, 72, 12, 12, (String)strHumidity); EPD.DrawUTF(96, 98, 12, 12, String(currentWeather.humidity) + "%");
 	EPD.DrawUTF(112, 76, 12, 12, MONTH_NAMES[timeinfo->tm_mon]); EPD.DrawUTF(112, 96, 12, 12, String(timeinfo->tm_mday));
 
-	EPD.DrawUTF(2, 147, 12, 12, WDAY_NAMES[timeinfo->tm_wday] + " " + String(currentWeather.tempMin, 1) + degreeSign + "~" + String(currentWeather.tempMax, 1) + degreeSign);
-	EPD.DrawUTF(17, 147, 12, 12, currentWeather.description + " " + strWindDirection[getWindDirectionSign(currentWeather.windDeg)] + "->" + String(currentWeather.windSpeed, 1) + "m/s");
-	EPD.DrawXline(114, 295, 30);
+	EPD.DrawUTF(2, 130, 12, 12, WDAY_NAMES[timeinfo->tm_wday] + " " + String(currentWeather.tempMin, 1) + degreeSign + "~" + String(currentWeather.tempMax, 1) + degreeSign);
+	EPD.DrawUTF(17, 130, 12, 12, currentWeather.description + " " + strWindDirection[getWindDirectionSign(currentWeather.windDeg)] + "->" + String(currentWeather.windSpeed, 1) + "m/s");
+	EPD.DrawXline(97, 295, 30);
 
 	//c for count, 2 is the maximum forecasts can display
 	for (int i = 0, c = 0, x = 31, last_mday = timeinfo->tm_mday; c < 2 && i < MAX_FORECASTS; i++) {
@@ -260,11 +260,11 @@ void updatedisplay()
 		struct tm * obsInfo = localtime(&obsTime);
 		if (last_mday != obsInfo->tm_mday) {
 			last_mday = obsInfo->tm_mday;
-			EPD.SetFont(13); unsigned char code3[] = { 0x00, getMeteoconIcon(forecasts[i].icon) }; EPD.DrawUnicodeStr(x, 113, 32, 32, 1, code3);
+			EPD.SetFont(13); unsigned char code3[] = { 0x00, getMeteoconIcon(forecasts[i].icon) }; EPD.DrawUnicodeStr(x, 97, 32, 32, 1, code3);
 			EPD.SetFont(3);
-			EPD.DrawUTF(x + 2, 147, 12, 12, WDAY_NAMES[obsInfo->tm_wday] + " "  + String(forecasts[i].tempMin, 1) + degreeSign  + "~" + String(forecasts[i].tempMax, 1) + degreeSign);
-			EPD.DrawUTF(x + 17, 147, 12, 12, forecasts[i].description + " " + strWindDirection[getWindDirectionSign(forecasts[i].windDeg)] + "->" + String(forecasts[i].windSpeed, 1) + "m/s");
-			EPD.DrawXline(114, 295, x + 30);
+			EPD.DrawUTF(x + 2, 130, 12, 12, WDAY_NAMES[obsInfo->tm_wday] + " "  + String(forecasts[i].tempMin, 1) + degreeSign  + "~" + String(forecasts[i].tempMax, 1) + degreeSign);
+			EPD.DrawUTF(x + 17, 130, 12, 12, forecasts[i].description + " " + strWindDirection[getWindDirectionSign(forecasts[i].windDeg)] + "->" + String(forecasts[i].windSpeed, 1) + "m/s");
+			EPD.DrawXline(97, 295, x + 30);
 			x += 31;
 			c++;
 		}
@@ -277,8 +277,8 @@ void updatedisplay()
 	EPD.SetFont(3);
 	EPD.DrawYline(96, 127, 123);
 	EPD.DrawYline(96, 127, 182);
-	EPD.DrawUTF(96, 192, 12, 12, "OpenWeatherMap");    //OpenWeatherMap
-	EPD.DrawUTF(112, 187, 12, 12, (String)strLastUpdate + " " + lastUpdate);    //last time updated
+	EPD.DrawUTF(96, 192, 12, 12, "OpenWeatherMap");                                 //OpenWeatherMap
+	EPD.DrawUTF(112, 187, 12, 12, (String)strLastUpdate + " " + lastUpdate);        //last time updated
 	EPD.DrawUTF(96, 128, 12, 12, (String)strPressure);
 	EPD.DrawUTF(112, 128, 12, 12, String(currentWeather.pressure / 10.0, 1) + "kPa");
 
@@ -287,15 +287,15 @@ void updatedisplay()
 	EPD.DrawYline(96, 127, 67);
 	dis_batt(3, 272);
 
-	for (int i = 0; i < 1808; i++) EPD.EPDbuffer[i] = ~EPD.EPDbuffer[i];
-	for (int i = 128 * 296 / 8 - 1; i >= 1808; i -= 16) {
+	for (int i = 0; i < 1536; i++) EPD.EPDbuffer[i] = ~EPD.EPDbuffer[i];
+	for (int i = 128 * 296 / 8 - 1; i >= 1536; i -= 16) {
 		EPD.EPDbuffer[i] = ~EPD.EPDbuffer[i];
 		EPD.EPDbuffer[i - 1] = ~EPD.EPDbuffer[i - 1];
 		EPD.EPDbuffer[i - 2] = ~EPD.EPDbuffer[i - 2];
 		EPD.EPDbuffer[i - 3] = ~EPD.EPDbuffer[i - 3];
 	}
 	for (int x = 92; x < 96; x++)
-		EPD.DrawXline(113, 295, x);
+		EPD.DrawXline(96, 295, x);
 	EPD.EPD_Dis_Part(0, 127, 0, 295, (unsigned char *)EPD.EPDbuffer, 1);
 	//EPD.EPD_Dis_Full((unsigned char *)EPD.EPDbuffer,1);
 	driver_delay_xms(DELAYTIME);
@@ -333,9 +333,6 @@ void updateData()
 	currentWeatherClient->updateCurrentById(&currentWeather, apiKey, locID);
 	delete currentWeatherClient;
 	currentWeatherClient = nullptr;
-//shorten the long description
-	if (currentWeather.description == "scattered clouds")
-		currentWeather.description = "scttd clouds";
 
 	if (LANG == 1) //upercase the first character
 		currentWeather.description[0] -= 32;
@@ -351,13 +348,9 @@ void updateData()
 	forecastClient = nullptr;
 
 
-	for (int i = 0; i < MAX_FORECASTS; i++) {
-		//shorten the long description
-		if (forecasts[i].description == "scattered clouds")
-			forecasts[i].description = "scttd clouds";
+	for (int i = 0; i < MAX_FORECASTS; i++)
 		if (LANG == 1) //upercase the first character
 			forecasts[i].description[0] -= 32;
-	}
 	lastUpdate = ntpClient.getFormattedTime();
 }
 
