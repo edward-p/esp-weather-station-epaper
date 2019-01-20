@@ -243,7 +243,7 @@ void updatedisplay()
 
 	EPD.clearshadows(); EPD.clearbuffer(); EPD.fontscale = 1;
 
-	EPD.SetFont(12); unsigned char code[] = { 0x00,  getMeteoconIcon(currentWeather.icon) }; EPD.DrawUnicodeStr(0, 16, 80, 80, 1, code);
+	EPD.SetFont(12); unsigned char code[] = { 0x00,  getMeteoconIcon(currentWeather.icon) }; EPD.DrawUnicodeStr(0, 10, 80, 80, 1, code);
 	EPD.SetFont(13); unsigned char code2[] = { 0x00, getMeteoconIcon(currentWeather.icon) }; EPD.DrawUnicodeStr(0, 97, 32, 32, 1, code2);
 	EPD.SetFont(3);
 	EPD.DrawXbm_P(80, 5, 12, 12, (unsigned char *)city_icon); EPD.DrawUTF(80, 21, 12, 12, currentWeather.cityName); //city name
