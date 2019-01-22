@@ -2,6 +2,8 @@
 
 [传送门-------->](http://www.windworkshop.cn/?p=758)
 
+**ps:本人当前使用的是2.5.0-beta2版的ESP8266环境，不保证其他版本也能正常编译运行**
+
 ## 导入ESP8266FS工具
 
 下载 [ESP8266FS-0.3.0.zip](https://github.com/esp8266/arduino-esp8266fs-plugin/releases/download/0.3.0/ESP8266FS-0.3.0.zip)
@@ -76,3 +78,12 @@
 -   关闭电源
 -   打开电源后，再按住内侧按钮不放
 -   直到屏幕上出现配置提示
+
+## 天气apiKey，Location ID获取
+
+由于你的设备将要从OpenWeatherMap获取并显示天气数据，你需要一个OpenWeatherMap的“API key”，
+
+-   请前往 <https://home.openweathermap.org/users/sign_up> 注册一个OpenWeatherMap帐号（因为人机验证是google提供，所以。。）
+-   完成注册后你可以再<https://home.openweathermap.org/api_keys> 查看你的“API key”，他是一串32个字符的十六进制字符串
+-   Location ID可以搜到城市之后在浏览器地址栏查看，比如<https://openweathermap.org/city/2643743>. `2643743` 就是伦敦的 Location ID.
+-   免费用户的API一分钟请求次数不超过60次，是绝对够用的。
