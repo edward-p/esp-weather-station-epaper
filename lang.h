@@ -24,7 +24,7 @@ extern const String strWindDirection[] = {
 	"W",
 	"WNW",
 	"WN",
-	"NWN"
+	"NNW"
 };
 const char* strHumidity = "HUM";
 const char* strPressure = "Pressure";
