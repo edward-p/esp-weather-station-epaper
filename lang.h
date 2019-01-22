@@ -1,3 +1,6 @@
+#ifndef __LANG_H
+#define __LANG_H
+
 #define LANG 1  //1 English 2 Chinees
 const String WDAY_NAMES[] = { "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT" };
 const String MONTH_NAMES[] = { "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC" };
@@ -5,7 +8,7 @@ const String MONTH_NAMES[] = { "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", 
 #if (LANG == 1)
 
 const String OPEN_WEATHER_MAP_LANGUAGE = "en";
-const String strWindDirection[] = {
+extern const String strWindDirection[] = {
 	"N",
 	"NNE",
 	"NE",
@@ -39,7 +42,7 @@ const char* config_timeout_line4 = "③ Turn on the power";
 #endif
 #if (LANG == 2)
 const String OPEN_WEATHER_MAP_LANGUAGE = "zh";
-const String strWindDirection[] = {
+extern const String strWindDirection[] = {
 	"北",
 	"北东北",
 	"东北",
@@ -71,3 +74,5 @@ const char* config_timeout_line2 = "① 关闭电源";
 const char* config_timeout_line3 = "② 按住reset键数秒";
 const char* config_timeout_line4 = "③ 开启电源重新进入配置模式";
 #endif
+
+#endif /* end of include guard: __LANG_H */
