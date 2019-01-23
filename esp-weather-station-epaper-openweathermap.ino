@@ -362,7 +362,6 @@ void updateData()
 	OpenWeatherMapForecast *forecastClient = new OpenWeatherMapForecast();
 	forecastClient->setMetric(IS_METRIC);
 	forecastClient->setLanguage(OPEN_WEATHER_MAP_LANGUAGE);
-	uint8_t allowedHours[] = { 0, 3, 6, 8, 12, 15, 18, 21 };
 
 	forecastClient->setAllowedHours(allowedHours, sizeof(allowedHours));
 	forecastClient->updateForecastsById(forecasts, apiKey, locID, MAX_FORECASTS);

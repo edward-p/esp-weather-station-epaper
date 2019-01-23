@@ -15,5 +15,6 @@ extern const boolean IS_METRIC = true;
 const String degreeSign = (IS_METRIC ? "°C" : "°F");
 
 const uint8_t MAX_FORECASTS = 24;
-
+//allowed observation time
+uint8_t allowedHours[] = { 0, 3, 6, 9, 12, 15, 18, 21 };
 #endif /* end of include guard: __SETTINGS_H */
