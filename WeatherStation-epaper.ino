@@ -85,7 +85,7 @@ void setup() {
   pinMode(DC, OUTPUT);
   pinMode(RST, OUTPUT);
   pinMode(BUSY, INPUT);
-  EEPROM.begin(20);
+  EEPROM.begin(sizeof(ConfigStruct));
   SPI.beginTransaction(SPISettings(2000000, MSBFIRST, SPI_MODE0));
   SPI.begin();
   SPIFFS.begin();
@@ -137,17 +137,15 @@ void setup() {
     server.toCharArray(config_s.server, sizeof(config_s.server));
     config_s.port = port;
     EEPROM.put(0, config_s);
+    EEPROM.commit();
   }
 
   struct ConfigStruct config_s;
   EEPROM.get(0, config_s);
+
   city = String(config_s.city);
   server = String(config_s.server);
   port = config_s.port;
-
-  Serial.println("city: " + city);
-  Serial.println("server: " + server);
-  Serial.println("port: " + port);
 
   timeClient = new TimeClient(UTC_OFFSET, server, port);
   heweather = new heweatherclient(server, port, lang);
@@ -166,6 +164,7 @@ void setup() {
   free(heweather);
   free(timeClient);
 }
+
 void check()
 {
   if (updating == true)
@@ -183,7 +182,9 @@ void loop() {
   {
     WiFiManager wifiManager;
     wifiManager.resetSettings();
+    ESP.reset();
   }
+  
   EPD.deepsleep();
   ESP.deepSleep(60 * sleeptime * 1000000);
 
@@ -204,9 +205,9 @@ void updatedisplay()
   EPD.DrawXline(114, 295, 96);
 
   EPD.SetFont(3);
-  Serial.println("heweather->citystr");
-  Serial.println(heweather->citystr);
-  EPD.DrawXbm_P(80, 5, 12, 12, (unsigned char *)city_icon); EPD.DrawUTF(80, 21, 12, 12, heweather->citystr); //城市名
+  Serial.println("heweather->city");
+  Serial.println(heweather->city);
+  EPD.DrawXbm_P(80, 5, 12, 12, (unsigned char *)city_icon); EPD.DrawUTF(80, 21, 12, 12, heweather->city); //城市名
   EPD.DrawUTF(80, 70, 12, 12, heweather->now_txt); //当前天气
   EPD.DrawUTF(98, 70, 12, 12, "RH " + heweather->now_hum + "%");
   EPD.DrawUTF(112, 70, 12, 12, "FL " + heweather->now_feels_like + "°C");

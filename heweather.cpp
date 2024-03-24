@@ -33,12 +33,12 @@ void heweatherclient::value(String value) {
     if (currentKey == "primary") primary = value;
     if (currentKey == "pm10") pm10 = value;
     if (currentKey == "pm2p5") pm2p5 = value;
-    if (currentKey == "no2") no2= value;
+    if (currentKey == "no2") no2 = value;
     if (currentKey == "so2") so2 = value;
     if (currentKey == "co") co = value;
     if (currentKey == "o3") o3 = value;
   }
-  
+
   if (currentParent == "now")
   {
     if (currentKey == "cond") now_cond = value;
@@ -103,7 +103,8 @@ void heweatherclient::value(String value) {
     if (currentKey == "txt_d") thedayaftertomorrow_txt_d = value;
     if (currentKey == "txt_n") thedayaftertomorrow_txt_n = value;
   }
-  
+
+  if (currentKey = "city") city = value;
   if (currentKey = "message") message = value;
   //Serial.println("value: " + value);
 }
@@ -141,32 +142,26 @@ void heweatherclient::update()
     return;
   }
 
-  Serial.print("Requesting URL: ");
-
   // This will send the request to the server
   client.print(String("GET /weather?city=") + city + "&lang=" + lang + "&client_name=" + client_name + " HTTP/1.1\r\n" +
                "Host: " + server + "\r\n" +
-               "Connection: close\r\n" +
+               "Connection: keep\r\n" +
                "\r\n" );
 
-
-  int pos = 0;
-  boolean isBody = false;
-  char c;
-
-  int size = 0;
   client.setNoDelay(false);
+  
+  Serial.println(">>>Response: ");
   while (client.connected()) {
-    Serial.println(client.available());
-    delay(500);
+    //    Serial.println(client.available());
     while (client.available()) {
-      c = client.read();
-      Serial.print(c);
-      if (c == '{' || c == '[') {
-        isBody = true;
-      }
-      if (isBody) {
-        parser.parse(c);
+      String line = client.readStringUntil('\n');
+      Serial.println(line);
+      if (line.startsWith("{")) {
+        for (int i = 0; i < line.length(); i++) {
+          parser.parse(line[i]);
+        }
+        client.stop();
+        break;
       }
     }
   }

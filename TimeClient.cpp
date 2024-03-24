@@ -40,41 +40,16 @@ void TimeClient::updateTime() {
     return;
   }
 
-  Serial.print("Requesting URL: ");
-
   // This will send the request to the server
   client.print(String("GET /time") + " HTTP/1.1\r\n" +
                "Host: " + server + "\r\n" +
-               "Connection: close\r\n" +
-               "\r\n" );
-
-
-  /*if (!client.connect("duckduckweather.esy.es",80)) {
-    Serial.println("connection failed");
-    return;
-    }
-
-    // This will send the request to the server
-    client.print(String("GET")+"/time.php"+"HTTP/1.1\r\n" +
-               String("Host:duckduckweather.esy.es\r\n") +
-               String("Connection: close\r\n\r\n"));
-    int repeatCounter = 0;
-    while(!client.available() && repeatCounter < 100) {
-    delay(500);
-    Serial.println(".");
-    repeatCounter++;
-    }*/
-
-  String line;
-  int size = 0;
+               "Connection: keep\r\n" +
+               "\r\n");
   client.setNoDelay(false);
+  Serial.println(">>>Response: ");
   while (client.connected()) {
-    Serial.println("time server connected");
-    Serial.println(client.available());
-    while ((size = client.available()) > 0) {
-
-
-      line = client.readStringUntil('\n'); Serial.println(line);
+    while (client.available()) {
+      String line = client.readStringUntil('\n'); Serial.println(line);
       line.toUpperCase();
       // example:
       // date: Thu, 19 Nov 2015 20:25:40 GMT
@@ -89,10 +64,14 @@ void TimeClient::updateTime() {
         Serial.println(localEpoc);
 
         localMillisAtUpdate = millis();
+        client.stop();
+        break;
       }
-    }
-  }
 
+    }
+
+
+  }
 }
 
 String TimeClient::getHours() {
