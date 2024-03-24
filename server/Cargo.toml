@@ -16,3 +16,4 @@ derive-getters = "0.3"
 
 [profile.release]
 lto = true
+strip = "debuginfo"
