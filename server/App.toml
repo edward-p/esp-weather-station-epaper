@@ -1,0 +1,5 @@
+## defaults for _all_ profiles
+[default]
+address = "0.0.0.0"
+port = 6780
+heweather_key = # get from https://console.qweather.com/#/apps
