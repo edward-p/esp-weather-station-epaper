@@ -6,7 +6,7 @@ class heweatherListener: public JsonListener {
 
   public:
     virtual void whitespace(char c);
-  
+
     virtual void startDocument();
 
     virtual void key(String key);

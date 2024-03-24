@@ -11,14 +11,14 @@ void heweatherListener::startDocument() {
 }
 
 void heweatherListener::key(String key) {
-   
-  
+
+
   Serial.println("key: " + key);
 }
 
 void heweatherListener::value(String value) {
- 
-  
+
+
   Serial.println("value: " + value);
 }
 
@@ -35,10 +35,9 @@ void heweatherListener::endDocument() {
 }
 
 void heweatherListener::startArray() {
-   Serial.println("start array. ");
+  Serial.println("start array. ");
 }
 
 void heweatherListener::startObject() {
-   Serial.println("start object. ");
+  Serial.println("start object. ");
 }
-

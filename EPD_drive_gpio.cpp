@@ -3,18 +3,16 @@
 
 /*********************************************
 
-*********************************************/	
- void SPI_Write(unsigned char value)                                    
-{     		
-	SPI.transfer(value);
+*********************************************/
+void SPI_Write(unsigned char value)
+{
+  SPI.transfer(value);
 }
 
 /*********************************************
 
-*********************************************/	
-void driver_delay_xms(unsigned long xms)	
-{	
-	delay(xms);
+*********************************************/
+void driver_delay_xms(unsigned long xms)
+{
+  delay(xms);
 }
-
-
