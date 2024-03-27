@@ -51,7 +51,7 @@ struct ConfigStruct {
  **************************/
 //const char* WIFI_SSID = "";
 //const char* WIFI_PWD = "";
-const int sleeptime = 60;   //updating interval 71min maximum
+const int sleeptime = 39;   //updating interval 71min maximum
 const float UTC_OFFSET = 8;
 byte end_time = 1;          //time that stops to update weather forecast
 byte start_time = 7;        //time that starts to update weather forecast
@@ -195,7 +195,7 @@ void updatedisplay()
 
   EPD.clearshadows(); EPD.clearbuffer(); EPD.fontscale = 1;
 
-  boolean isNight = timeClient->getHours().toInt() >= 7;
+  boolean isNight = timeClient->getHours().toInt() >= 19;
   EPD.SetFont(12); unsigned char code[] = {0x00, heweather->now_cond_index.toInt()}; EPD.DrawUnicodeStr(0, 16, 80, 80, 1, code);
   EPD.SetFont(13); unsigned char code2[] = {0x00, isNight ? heweather->today_cond_n_index.toInt() : heweather->today_cond_d_index.toInt()}; EPD.DrawUnicodeStr(0, 113, 32, 32, 1, code2);
   EPD.SetFont(13); unsigned char code3[] = {0x00, heweather->tomorrow_cond_d_index.toInt()}; EPD.DrawUnicodeStr(32, 113, 32, 32, 1, code3);
@@ -218,7 +218,7 @@ void updatedisplay()
   EPD.DrawUTF(50, 145, 12, 12, heweather->tomorrow_txt_d + "/" + heweather->tomorrow_txt_n);
   EPD.DrawUTF(66, 145, 12, 12, (String)thedayaftertomorrowstr + " " + heweather->thedayaftertomorrow_tmp_min + "°C~" + heweather->thedayaftertomorrow_tmp_max + "°C");
   EPD.DrawUTF(80, 145, 12, 12, heweather->thedayaftertomorrow_txt_d + "/" + heweather->thedayaftertomorrow_txt_n);
-  EPD.DrawXbm_P(106, 116, 12, 12, (unsigned char *)aqi_icon); EPD.DrawUTF(106, 131, 12, 12, heweather->category + "[" + heweather->aqi + "]" + "，pm10[" + heweather->pm10 + "]，pm2.5[" + heweather->pm2p5 + "]");
+  EPD.DrawXbm_P(106, 116, 12, 12, (unsigned char *)aqi_icon); EPD.DrawUTF(106, 131, 12, 12, heweather->category + "[" + heweather->aqi + "]" + ", pm10[" + heweather->pm10 + "], pm2_5[" + heweather->pm2p5 + "]");
   //  EPD.DrawUTF(86,116,16,16,"RH:"+heweather->now_hum+"%"+" "+heweather->now_dir+heweather->now_sc);
   //  EPD.DrawXbm_P(76,116,12,12,(unsigned char *)night);  EPD.DrawUTF(76,131,12,12,tonightstr+heweather->today_txt_n);
 

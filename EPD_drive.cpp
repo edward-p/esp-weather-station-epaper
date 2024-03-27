@@ -165,7 +165,7 @@ void WaveShare_EPD::DrawUnicodeStr(byte x, int16_t y, byte width, byte height, b
     {
 
       DrawUnicodeChar(x + xmove, y + ymove, width, height, (unsigned char *)code + i);
-      ymove += CurrentCursor + 1;
+      ymove += CurrentCursor + 2;
       if ((y + ymove + width) >= yDot - 1) {
         xmove += height + 1;
         ymove = 0;
