@@ -51,7 +51,7 @@ struct ConfigStruct {
  **************************/
 //const char* WIFI_SSID = "";
 //const char* WIFI_PWD = "";
-const int sleeptime = 39;   //updating interval 71min maximum
+uint64_t sleeptime = 60;   //updating interval 71min maximum
 const float UTC_OFFSET = 8;
 byte end_time = 1;          //time that stops to update weather forecast
 byte start_time = 7;        //time that starts to update weather forecast
@@ -100,7 +100,7 @@ void setup() {
   WiFiManager wifiManager;
   if (read_config() == 126)
   {
-    EPD.deepsleep(); ESP.deepSleep(60 * sleeptime * 1000000);
+    EPD.deepsleep(); ESP.deepSleep(60 * sleeptime * 1000000, WAKE_RF_DISABLED);
   }
   wifiManager.setConfigPortalTimeout(180);
   wifiManager.setAPCallback(configModeCallback);
@@ -122,7 +122,7 @@ void setup() {
     EPD.DrawUTF(36, 0, 12, 12, config_timeout_line3);
     EPD.DrawUTF(52, 0, 12, 12, config_timeout_line4);
     EPD.EPD_Dis_Part(0, 127, 0, 295, (unsigned char *)EPD.EPDbuffer, 1);
-    EPD.deepsleep(); ESP.deepSleep(60 * sleeptime * 1000000);
+    EPD.deepsleep(); ESP.deepSleep(60 * sleeptime * 1000000, WAKE_RF_DISABLED);
   }
   city = p_city.getValue();
   server = p_server.getValue();
@@ -170,7 +170,7 @@ void check()
   if (updating == true)
   {
     EPD.deepsleep();
-    ESP.deepSleep(60 * sleeptime * 1000000);
+    ESP.deepSleep(60 * sleeptime * 1000000, WAKE_RF_DISABLED);
   }
   avoidstuck.detach();
   return;
@@ -184,9 +184,9 @@ void loop() {
     wifiManager.resetSettings();
     ESP.reset();
   }
-  
+
   EPD.deepsleep();
-  ESP.deepSleep(60 * sleeptime * 1000000);
+  ESP.deepSleep(60 * sleeptime * 1000000, WAKE_RF_DISABLED);
 
 }
 
@@ -355,7 +355,7 @@ void check_rtc_mem()
       Serial.println(rtc_mem[1]);
       ESP.rtcUserMemoryWrite(0, (uint32_t*)&rtc_mem, sizeof(rtc_mem));
       EPD.deepsleep();
-      ESP.deepSleep(60 * sleeptime * 1000000);
+      ESP.deepSleep(60 * sleeptime * 1000000, WAKE_RF_DISABLED);
     }
   }
 
