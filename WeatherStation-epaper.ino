@@ -195,7 +195,8 @@ void updatedisplay()
 
   EPD.clearshadows(); EPD.clearbuffer(); EPD.fontscale = 1;
 
-  boolean isNight = timeClient->getHours().toInt() >= 19;
+  int hour = timeClient->getHours().toInt();
+  boolean isNight = hour > 18 || hour < 7;
   EPD.SetFont(12); unsigned char code[] = {0x00, heweather->now_cond_index.toInt()}; EPD.DrawUnicodeStr(0, 16, 80, 80, 1, code);
   EPD.SetFont(13); unsigned char code2[] = {0x00, isNight ? heweather->today_cond_n_index.toInt() : heweather->today_cond_d_index.toInt()}; EPD.DrawUnicodeStr(0, 113, 32, 32, 1, code2);
   EPD.SetFont(13); unsigned char code3[] = {0x00, heweather->tomorrow_cond_d_index.toInt()}; EPD.DrawUnicodeStr(32, 113, 32, 32, 1, code3);
