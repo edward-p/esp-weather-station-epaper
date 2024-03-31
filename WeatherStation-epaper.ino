@@ -100,7 +100,7 @@ void setup() {
   WiFiManager wifiManager;
   if (read_config() == 126)
   {
-    EPD.deepsleep(); ESP.deepSleep(60 * sleeptime * 1000000, WAKE_RF_DISABLED);
+    EPD.deepsleep(); ESP.deepSleep(60 * sleeptime * 1000000, WAKE_RF_DEFAULT);
   }
   wifiManager.setConfigPortalTimeout(180);
   wifiManager.setAPCallback(configModeCallback);
@@ -122,7 +122,7 @@ void setup() {
     EPD.DrawUTF(36, 0, 12, 12, config_timeout_line3);
     EPD.DrawUTF(52, 0, 12, 12, config_timeout_line4);
     EPD.EPD_Dis_Part(0, 127, 0, 295, (unsigned char *)EPD.EPDbuffer, 1);
-    EPD.deepsleep(); ESP.deepSleep(60 * sleeptime * 1000000, WAKE_RF_DISABLED);
+    EPD.deepsleep(); ESP.deepSleep(60 * sleeptime * 1000000, WAKE_RF_DEFAULT);
   }
   city = p_city.getValue();
   server = p_server.getValue();
@@ -170,7 +170,7 @@ void check()
   if (updating == true)
   {
     EPD.deepsleep();
-    ESP.deepSleep(60 * sleeptime * 1000000, WAKE_RF_DISABLED);
+    ESP.deepSleep(60 * sleeptime * 1000000, WAKE_RF_DEFAULT);
   }
   avoidstuck.detach();
   return;
@@ -186,7 +186,7 @@ void loop() {
   }
 
   EPD.deepsleep();
-  ESP.deepSleep(60 * sleeptime * 1000000, WAKE_RF_DISABLED);
+  ESP.deepSleep(60 * sleeptime * 1000000, WAKE_RF_DEFAULT);
 
 }
 
@@ -356,7 +356,7 @@ void check_rtc_mem()
       Serial.println(rtc_mem[1]);
       ESP.rtcUserMemoryWrite(0, (uint32_t*)&rtc_mem, sizeof(rtc_mem));
       EPD.deepsleep();
-      ESP.deepSleep(60 * sleeptime * 1000000, WAKE_RF_DISABLED);
+      ESP.deepSleep(60 * sleeptime * 1000000, WAKE_RF_DEFAULT);
     }
   }
 
